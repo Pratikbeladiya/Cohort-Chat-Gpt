@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const userModel = require("../model/auth.model");
 const messageModel = require("../model/message.model");
 const aiService = require("../services/ai.service");
+const {createMemory,queryMemory}= require("../services/vector.service");
 
 function initSocketServer(httpServer){
       const io=new Server(httpServer,{})
@@ -29,29 +30,15 @@ function initSocketServer(httpServer){
            
       })
 
-      io.on("connection",(socket)=>{
-      //       console.log("User connected:",socket.user);
-      //    console.log("New socket connection:", socket.id);
-
-      /*
-      socket.on("ai-message",async(messagePayload)=>{
-            console.log(messagePayload);
+      io.on("connection",async (socket)=>{
+      
 
             //what is inside the messagePayload:-{
             //chat:chatId,
             //content:message text content
-            }
             
-
-            await messageModel.create({
-            chat:messagePayload.chat,
-            user:socket.user._id,
-            content:messagePayload.content,
-            role:"user"
-            })
-            */
-            try{
             socket.on("ai-message", async (messagePayload) => {
+                try{
              // Parse payload if sent as string from Postman
             const payload = typeof messagePayload === "string" ? JSON.parse(messagePayload) : messagePayload;
             console.log("Received payload: ",payload);
@@ -64,6 +51,11 @@ function initSocketServer(httpServer){
             role: "user"
         });
 
+      //here are long term memory created
+        const vectors = await aiService.generateVector(payload.content);
+        console.log("vectors generated", vectors);
+
+      //here are short term memory created 
         const chatHistory = await messageModel.find({
             chat:payload.chat
         })
@@ -89,13 +81,12 @@ function initSocketServer(httpServer){
                 content: response,
                 chat: payload.chat
             });
-      })
+      
       }catch(err){
       console.log("Error handling ai-message: ",err);
-      }
-      
-         
-      })
-}
-
+       }
+     
+   }); // closes socket.on("ai-message")
+    });     // closes io.on("connection")
+}           // closes function initSocketServer
 module.exports = initSocketServer;
