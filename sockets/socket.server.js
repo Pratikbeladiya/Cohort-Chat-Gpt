@@ -8,6 +8,7 @@ const {createMemory,queryMemory}= require("../services/vector.service");
 
 //basically socket.io work with httpServer so that in server .js ,our app.js (server) pass in httpServer 
 //and make the connection of socket.io with httpServer which is comes by default with node.js installation
+//pass the httpServer in arguments of the function in order to create server
 function initSocketServer(httpServer){
       const io=new Server(httpServer,{})
 
