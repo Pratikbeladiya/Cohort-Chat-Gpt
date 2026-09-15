@@ -6,7 +6,8 @@ const messageModel = require("../model/message.model");
 const aiService = require("../services/ai.service");
 const {createMemory,queryMemory}= require("../services/vector.service");
 
-//basically socket.io work with httpServer so that in server .js ,our app.js (server) pass in httpServer
+//basically socket.io work with httpServer so that in server .js ,our app.js (server) pass in httpServer 
+//and make the connection of socket.io with httpServer which is comes by default with node.js installation
 function initSocketServer(httpServer){
       const io=new Server(httpServer,{})
 
