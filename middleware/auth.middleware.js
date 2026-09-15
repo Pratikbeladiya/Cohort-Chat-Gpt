@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const authModel = require("../model/auth.model");
 
+//this middleware is use for the verify the user identity based on token
 async function authUser(req,res,next){
    const {token}=req.cookies;
 
