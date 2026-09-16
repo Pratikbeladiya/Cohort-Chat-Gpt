@@ -47,7 +47,7 @@ function initSocketServer(httpServer){
             console.log("Received payload: ",payload);
             
             //save user message
-            await messageModel.create({
+            const message=await messageModel.create({
             chat: payload.chat,
             user: socket.user._id,
             content: payload.content,
