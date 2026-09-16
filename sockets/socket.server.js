@@ -88,7 +88,7 @@ function initSocketServer(httpServer){
         }));
         
          //3.save await model response
-            await messageModel.create({
+            const responseMessage=await messageModel.create({
                 chat: payload.chat,
                 user: socket.user._id,
                 content: response,
