@@ -94,6 +94,8 @@ function initSocketServer(httpServer){
                 content: response,
                 role: "model"
             });
+
+            const responseVectors = await aiService.generateVector(response);
          
             //emit back to client 
             socket.emit("ai-response", {
