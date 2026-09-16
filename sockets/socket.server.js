@@ -66,7 +66,12 @@ function initSocketServer(httpServer){
 
         await createMemory({
             vectors,
-            messageId:message._id
+            messageId:message._id,
+            metadata:{
+                chat:payload.chat,
+                user:socket.user._id,
+                text:payload.content
+            }
         })
 
       //here are short term memory created 
