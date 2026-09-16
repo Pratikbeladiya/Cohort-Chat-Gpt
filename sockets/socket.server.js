@@ -62,6 +62,11 @@ function initSocketServer(httpServer){
             queryVectors:vectors,
             limit:3,
             metadata:{}
+        });
+
+        await createMemory({
+            vectors,
+            messageId:message._id
         })
 
       //here are short term memory created 
