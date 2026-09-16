@@ -58,6 +58,12 @@ function initSocketServer(httpServer){
         const vectors = await aiService.generateVector(payload.content);
         console.log("vectors generated", vectors);
 
+        const memory=await queryMemory({
+            queryVectors:vectors,
+            limit:3,
+            metadata:{}
+        })
+
       //here are short term memory created 
         const chatHistory = await messageModel.find({
             chat:payload.chat
