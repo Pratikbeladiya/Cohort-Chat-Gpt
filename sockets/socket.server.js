@@ -99,7 +99,10 @@ function initSocketServer(httpServer){
 
             await createMemory({
                 vectors:responseVectors,
-                messageId:responseMessage._id
+                messageId:responseMessage._id,
+                metadata:{
+                    chat:payload.chat
+                }
             })
          
             //emit back to client 
