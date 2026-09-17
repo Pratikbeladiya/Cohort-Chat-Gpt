@@ -101,7 +101,8 @@ function initSocketServer(httpServer){
                 vectors:responseVectors,
                 messageId:responseMessage._id,
                 metadata:{
-                    chat:payload.chat
+                    chat:payload.chat,
+                    user:socket.user._id
                 }
             })
          
