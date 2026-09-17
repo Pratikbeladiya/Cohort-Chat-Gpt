@@ -96,6 +96,11 @@ function initSocketServer(httpServer){
             });
 
             const responseVectors = await aiService.generateVector(response);
+
+            await createMemory({
+                vectors:responseVectors,
+                messageId:responseMessage._id
+            })
          
             //emit back to client 
             socket.emit("ai-response", {
