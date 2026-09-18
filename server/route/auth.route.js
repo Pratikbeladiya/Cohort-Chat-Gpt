@@ -3,7 +3,7 @@ const route = express.Router();
 const authController = require("../controller/auth.controller");
 const { authUser } = require("../middleware/auth.middleware");
 
-
+//define routes
 //define the register,login and user get routes 
 route.post("/user/register",authController.registerController);
 route.post("/user/login",authController.loginController);
