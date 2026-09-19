@@ -1,6 +1,8 @@
 //here require express package and create server 
 const express = require("express");
 const app = express();
+const cors = require("cors");
+
 const cookieParser = require("cookie-parser");
 const authRoute = require("./route/auth.route");
 const chatRoute = require("./route/chat.route");
@@ -9,6 +11,11 @@ const chatRoute = require("./route/chat.route");
 app.use(express.json());
 //this middleware of express that parse the cookies in specific location like browser
 app.use(cookieParser());
+
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true
+}));
 
 //define the root routes
 app.use("/api",authRoute);
