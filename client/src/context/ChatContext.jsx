@@ -52,10 +52,11 @@ export const ChatProvider = ({ children }) => {
     if (!user) return;
 
     const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
-socketRef.current = io(SERVER_URL, {
-  withCredentials: true,
-  transports: ['polling', 'websocket'] // Ensures fast, reliable connection
-});
+    socketRef.current = io(SERVER_URL, {
+      auth: { token: localStorage.getItem('token') },
+      withCredentials: true,
+      transports: ['polling', 'websocket']
+    });
 
     socketRef.current.on('connect', () => {
       console.log('Socket connected successfully');

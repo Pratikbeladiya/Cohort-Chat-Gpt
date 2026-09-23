@@ -14,19 +14,26 @@ export const AuthProvider = ({ children }) => {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (credentials) => {
+    const login = async (credentials) => {
     const res = await loginUser(credentials);
+    if (res.data.token) {
+      localStorage.setItem('token', res.data.token);
+    }
     setUser(res.data.user);
     return res.data;
   };
 
   const register = async (userData) => {
     const res = await registerUser(userData);
+    if (res.data.token) {
+      localStorage.setItem('token', res.data.token);
+    }
     setUser(res.data.user);
     return res.data;
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     setUser(null);
   };
