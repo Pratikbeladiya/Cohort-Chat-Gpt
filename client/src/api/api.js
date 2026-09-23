@@ -7,16 +7,6 @@ const API = axios.create({
   withCredentials: true
 });
 
-
-// Automatically send token in Authorization header for cross-origin reliability
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
 export const registerUser = (data) => API.post('/user/register', data);
 export const loginUser = (data) => API.post('/user/login', data);
 export const getCurrentUser = () => API.get('/user');
