@@ -28,7 +28,7 @@ export const MessageInput = () => {
       >
         <textarea
           rows={1}
-          placeholder="Message ChatGPT..."
+          placeholder="Message TalkBot..."
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
