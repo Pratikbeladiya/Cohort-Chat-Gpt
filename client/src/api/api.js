@@ -11,5 +11,7 @@ export const getCurrentUser = () => API.get('/user');
 export const createNewChat = (title) => API.post('/create/chat', { title });
 export const getUserChats = () => API.get('/create/chats');
 export const getChatMessages = (chatId) => API.get(`/create/messages/${chatId}`);
+export const deleteChatApi = (chatId) => API.delete(`/create/chat/${chatId}`);
+export const renameChatApi = (chatId, title) => API.patch(`/create/chat/${chatId}`, { title });
 
 export default API;

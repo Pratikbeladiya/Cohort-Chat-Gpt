@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
-import { createNewChat, getUserChats, getChatMessages } from '../api/api';
+import { createNewChat, getUserChats, getChatMessages, deleteChatApi, renameChatApi } from '../api/api';
 import { useAuth } from './AuthContext';
 
 const ChatContext = createContext();
@@ -13,7 +13,7 @@ export const ChatProvider = ({ children }) => {
   const [isAiTyping, setIsAiTyping] = useState(false);
   const socketRef = useRef(null);
 
-  // 1. Fetch user's chat list on page refresh or login
+  // 1. Fetch user's chats on page refresh or login
   useEffect(() => {
     if (!user) {
       setChats([]);
@@ -33,7 +33,7 @@ export const ChatProvider = ({ children }) => {
       .catch((err) => console.error('Failed to fetch chats:', err));
   }, [user]);
 
-  // 2. Fetch conversation messages whenever the user clicks/switches a chat
+  // 2. Fetch conversation messages whenever activeChat changes
   useEffect(() => {
     if (!activeChat?._id) {
       setMessages([]);
@@ -88,7 +88,43 @@ export const ChatProvider = ({ children }) => {
     }
   };
 
-  // 5. Send message
+  // 5. Delete chat
+  const deleteChat = async (chatId) => {
+    try {
+      await deleteChatApi(chatId);
+      setChats((prev) => prev.filter((c) => c._id !== chatId));
+
+      // If deleted chat was active, switch to next available chat or null
+      if (activeChat?._id === chatId) {
+        const remainingChats = chats.filter((c) => c._id !== chatId);
+        setActiveChat(remainingChats.length > 0 ? remainingChats[0] : null);
+        setMessages([]);
+      }
+    } catch (err) {
+      console.error('Failed to delete chat:', err);
+    }
+  };
+
+  // 6. Rename chat
+  const renameChat = async (chatId, newTitle) => {
+    if (!newTitle.trim()) return;
+    try {
+      const res = await renameChatApi(chatId, newTitle.trim());
+      const updatedChat = res.data.chat;
+
+      setChats((prev) =>
+        prev.map((c) => (c._id === chatId ? { ...c, title: updatedChat.title } : c))
+      );
+
+      if (activeChat?._id === chatId) {
+        setActiveChat((prev) => ({ ...prev, title: updatedChat.title }));
+      }
+    } catch (err) {
+      console.error('Failed to rename chat:', err);
+    }
+  };
+
+  // 7. Send message
   const sendMessage = async (content) => {
     if (!content.trim()) return;
 
@@ -119,6 +155,8 @@ export const ChatProvider = ({ children }) => {
         messages,
         isAiTyping,
         startNewChat,
+        deleteChat,
+        renameChat,
         sendMessage
       }}
     >
