@@ -7,5 +7,7 @@ const { authUser } = require("../middleware/auth.middleware");
 route.post("/chat", authUser, chatController.createChat);
 route.get("/chats", authUser, chatController.getUserChats);
 route.get("/messages/:chatId", authUser, chatController.getChatMessages);
+route.delete("/chat/:chatId", authUser, chatController.deleteChat);
+route.patch("/chat/:chatId", authUser, chatController.renameChat);
 
 module.exports = route;
