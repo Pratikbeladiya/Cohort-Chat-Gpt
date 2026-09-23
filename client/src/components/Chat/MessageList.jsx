@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { MessageItem } from './MessageItem';
-//import { TypingLoader } from '../Common/TypingLoader';
+import { TypingLoader } from '../Common/TypingLoader';
 import { useChat } from '../../context/ChatContext';
 
 export const MessageList = () => {
