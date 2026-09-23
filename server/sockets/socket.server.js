@@ -9,7 +9,13 @@ const { createMemory, queryMemory } = require("../services/vector.service");
 function initSocketServer(httpServer) {
     const io = new Server(httpServer, {
         cors: {
-            origin: "http://localhost:5173",
+            origin: function (origin, callback) {
+                if (!origin || origin.includes("localhost") || origin.endsWith(".vercel.app") || origin === process.env.CLIENT_URL) {
+                    callback(null, true);
+                } else {
+                    callback(null, true);
+                }
+            },
             credentials: true
         }
     });
@@ -59,10 +65,10 @@ function initSocketServer(httpServer) {
                             chat: payload.chat,
                             user: socket.user._id.toString(),
                             text: payload.content,
-                            role:"user"
+                            role: "user"
                         }
                     });
-                     console.log("User vector stored in Pinecone:", message._id);
+                    console.log("User vector stored in Pinecone:", message._id);
                 }
 
                 // 4. Query long-term memory & fetch short-term chat history
@@ -131,12 +137,12 @@ function initSocketServer(httpServer) {
                             chat: payload.chat,
                             user: socket.user._id.toString(),
                             text: response,
-                            role:"model"
+                            role: "model"
                         }
                     });
-                     console.log("Model vector stored in Pinecone:", responseMessage._id);
+                    console.log("Model vector stored in Pinecone:", responseMessage._id);
                 }
-               
+
 
             } catch (err) {
                 console.error("Error handling ai-message: ", err);

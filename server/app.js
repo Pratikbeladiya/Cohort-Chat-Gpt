@@ -5,9 +5,20 @@ const cookieParser = require("cookie-parser");
 const authRoute = require("./route/auth.route");
 const chatRoute = require("./route/chat.route");
 
-// 1. Enable CORS first
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: function (origin, callback) {
+    // Allows localhost, your custom CLIENT_URL, and any Vercel deployment preview/production URL
+    if (
+      !origin ||
+      origin.includes("localhost") ||
+      origin.endsWith(".vercel.app") ||
+      origin === process.env.CLIENT_URL
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 
