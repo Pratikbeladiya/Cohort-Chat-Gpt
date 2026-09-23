@@ -10,6 +10,7 @@ const httpServer = require("http").createServer(app);
 
 initSocketServer(httpServer);
 
-httpServer.listen(3000,()=>{
-    console.log("app is running on port 3000");
-})
+const PORT = process.env.PORT || 3000;
+httpServer.listen(PORT, () => {
+    console.log(`app is running on port ${PORT}`);
+});

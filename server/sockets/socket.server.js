@@ -23,8 +23,9 @@ function initSocketServer(httpServer) {
     // Socket auth middleware
     io.use(async (socket, next) => {
         const cookies = cookie.parse(socket.handshake.headers?.cookie || "");
+           const token = cookies.token || socket.handshake.auth?.token;
 
-        if (!cookies.token) {
+        if (!token) {
             return next(new Error("Authentication error: No token provided"));
         }
 
