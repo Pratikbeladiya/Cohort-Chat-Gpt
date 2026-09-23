@@ -1,12 +1,11 @@
 const express = require("express");
-const route = express .Router();
+const route = express.Router();
 const chatController = require("../controller/chat.controller");
 const { authUser } = require("../middleware/auth.middleware");
 
-//post of chat route
+// Routes mounted at /api/create
 route.post("/chat", authUser, chatController.createChat);
+route.get("/chats", authUser, chatController.getUserChats);
+route.get("/messages/:chatId", authUser, chatController.getChatMessages);
 
-
-
-
-module.exports =route;
+module.exports = route;
